@@ -1,42 +1,40 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { useI18n } from "@/components/i18n/i18n-provider";
+import { LanguageToggle } from "@/components/i18n/language-toggle";
 import { navItems } from "@/components/layout/navigation";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
+import { utilTools } from "@/components/layout/util-tools";
 
-interface SidebarProps {
-  categories: string[];
-}
-
-export function Sidebar({ categories }: SidebarProps) {
+export function Sidebar() {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const currentCategory = searchParams.get("category");
-  const [postOpen, setPostOpen] = useState(pathname.startsWith("/blog"));
+  const { t } = useI18n();
+  const [utilOpen, setUtilOpen] = useState(pathname.startsWith("/util"));
 
   return (
     <aside className="border-border bg-background sticky top-0 hidden h-screen border-r md:block">
       <div className="flex h-full w-60 flex-col px-5 py-8">
         <div className="mb-2 flex items-center justify-between gap-2">
           <Link href="/" className="text-xl font-semibold tracking-tight">
-            Post
+            {t("brand.name")}
           </Link>
         </div>
-        <p className="text-muted-foreground mt-1 text-sm">기록을 남기는 공간</p>
+        <p className="text-muted-foreground mt-1 text-sm">{t("brand.tagline")}</p>
 
         <nav className="mt-8 flex flex-1 flex-col gap-2">
-          {navItems.map(({ href, label }) => {
+          {navItems.map(({ href, labelKey }) => {
             const isActive = pathname === href || pathname.startsWith(`${href}/`);
 
-            if (href === "/blog") {
+            if (href === "/util") {
               return (
                 <div key={href} className="space-y-2">
                   <button
                     type="button"
-                    onClick={() => setPostOpen((previous) => !previous)}
-                    aria-expanded={postOpen}
+                    onClick={() => setUtilOpen((previous) => !previous)}
+                    aria-expanded={utilOpen}
                     aria-current={isActive ? "page" : undefined}
                     className={`rounded-md px-3 py-2 text-sm font-medium transition-colors ${
                       isActive
@@ -44,32 +42,32 @@ export function Sidebar({ categories }: SidebarProps) {
                         : "text-muted-foreground hover:text-foreground hover:bg-accent"
                     }`}
                   >
-                    {label}
+                    {t(labelKey)}
                   </button>
 
-                  {postOpen && (
+                  {utilOpen && (
                     <div className="ml-3 flex flex-col gap-1">
                       <Link
-                        href="/blog"
+                        href="/util"
                         className={`px-2 py-1 text-xs font-medium transition-colors ${
-                          pathname === "/blog" && !currentCategory
+                          pathname === "/util"
                             ? "text-sky-600 dark:text-sky-400"
                             : "text-muted-foreground hover:text-foreground"
                         }`}
                       >
-                        All
+                        {t("common.all")}
                       </Link>
-                      {categories.map((category) => (
+                      {utilTools.map((tool) => (
                         <Link
-                          key={category}
-                          href={`/blog?category=${encodeURIComponent(category)}`}
+                          key={tool.href}
+                          href={tool.href}
                           className={`px-2 py-1 text-xs font-medium transition-colors ${
-                            pathname === "/blog" && currentCategory === category
+                            pathname === tool.href
                               ? "text-sky-600 dark:text-sky-400"
                               : "text-muted-foreground hover:text-foreground"
                           }`}
                         >
-                          {category}
+                          {t(tool.labelKey)}
                         </Link>
                       ))}
                     </div>
@@ -89,13 +87,14 @@ export function Sidebar({ categories }: SidebarProps) {
                     : "text-muted-foreground hover:text-foreground hover:bg-accent"
                 }`}
               >
-                {label}
+                {t(labelKey)}
               </Link>
             );
           })}
         </nav>
 
-        <div>
+        <div className="flex items-center gap-2">
+          <LanguageToggle />
           <ThemeToggle />
         </div>
       </div>
