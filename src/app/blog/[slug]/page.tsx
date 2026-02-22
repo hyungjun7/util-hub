@@ -13,9 +13,7 @@ function getPostBySlug(slug: string) {
 }
 
 export async function generateStaticParams() {
-  return posts
-    .filter((post) => post.published)
-    .map((post) => ({ slug: post.slugAsParams }));
+  return posts.filter((post) => post.published).map((post) => ({ slug: post.slugAsParams }));
 }
 
 export async function generateMetadata({ params }: PostPageProps): Promise<Metadata> {
@@ -45,7 +43,7 @@ export default async function PostPage({ params }: PostPageProps) {
   return (
     <article className="container mx-auto max-w-3xl px-4 py-16">
       <PostHeader post={post} />
-      <div className="prose prose-neutral dark:prose-invert mt-10 max-w-none">
+      <div className="mdx-prose prose prose-neutral mt-10 max-w-none">
         <MDXContent code={post.body} />
       </div>
     </article>

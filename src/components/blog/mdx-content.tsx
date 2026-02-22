@@ -1,12 +1,15 @@
 "use client";
 
+import type { ReactElement } from "react";
 import * as runtime from "react/jsx-runtime";
 
-// Velite가 컴파일한 MDX 코드를 평가하여 컴포넌트로 반환
-function useMDXComponent(code: string) {
-  const fn = new Function(code);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return fn({ ...runtime }).default as React.ComponentType<any>;
+type MDXModule = {
+  default: () => ReactElement;
+};
+
+function getMDXComponent(code: string) {
+  const evaluate = new Function(code) as (jsxRuntime: typeof runtime) => MDXModule;
+  return evaluate({ ...runtime }).default;
 }
 
 interface MDXContentProps {
@@ -14,6 +17,6 @@ interface MDXContentProps {
 }
 
 export function MDXContent({ code }: MDXContentProps) {
-  const Component = useMDXComponent(code);
-  return <Component />;
+  const render = getMDXComponent(code);
+  return render();
 }

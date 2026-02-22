@@ -1,4 +1,5 @@
 import { defineConfig, defineCollection, s } from "velite";
+import remarkGfm from "remark-gfm";
 import rehypePrettyCode from "rehype-pretty-code";
 
 const posts = defineCollection({
@@ -8,6 +9,7 @@ const posts = defineCollection({
     .object({
       title: s.string().max(100),
       description: s.string().max(300),
+      category: s.string().max(40).default("General"),
       date: s.isodate(),
       tags: s.array(s.string()).default([]),
       published: s.boolean().default(true),
@@ -43,6 +45,6 @@ export default defineConfig({
         },
       ],
     ],
-    remarkPlugins: [],
+    remarkPlugins: [remarkGfm],
   },
 });

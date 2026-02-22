@@ -9,6 +9,7 @@ const postsData = require("../../.velite/posts.json") as unknown[];
 export type Post = {
   title: string;
   description: string;
+  category: string;
   date: string;
   tags: string[];
   published: boolean;

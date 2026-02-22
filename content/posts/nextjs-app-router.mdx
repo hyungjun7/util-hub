@@ -1,6 +1,7 @@
 ---
 title: "Next.js App Router 정리"
 description: "Next.js의 App Router에 대한 핵심 개념을 정리합니다."
+category: "Dev"
 date: "2026-02-20"
 tags: ["Next.js", "React", "웹개발"]
 published: true
@@ -22,7 +23,7 @@ async function PostList() {
   const posts = await fetchPosts(); // 직접 DB/API 호출 가능
   return (
     <ul>
-      {posts.map(post => (
+      {posts.map((post) => (
         <li key={post.id}>{post.title}</li>
       ))}
     </ul>
@@ -41,23 +42,19 @@ import { useState } from "react";
 
 function Counter() {
   const [count, setCount] = useState(0);
-  return (
-    <button onClick={() => setCount(c => c + 1)}>
-      Count: {count}
-    </button>
-  );
+  return <button onClick={() => setCount((c) => c + 1)}>Count: {count}</button>;
 }
 ```
 
 ### 3. 파일 기반 라우팅
 
-| 파일명 | 역할 |
-|--------|------|
-| `page.tsx` | 라우트의 UI |
-| `layout.tsx` | 공통 레이아웃 |
-| `loading.tsx` | 로딩 UI |
-| `error.tsx` | 에러 UI |
-| `not-found.tsx` | 404 UI |
+| 파일명          | 역할          |
+| --------------- | ------------- |
+| `page.tsx`      | 라우트의 UI   |
+| `layout.tsx`    | 공통 레이아웃 |
+| `loading.tsx`   | 로딩 UI       |
+| `error.tsx`     | 에러 UI       |
+| `not-found.tsx` | 404 UI        |
 
 ## 결론
 
